@@ -44,6 +44,10 @@
         margin-top: 30px;
         flex: 1 1 auto;
         overflow: scroll;
+
+        &::-webkit-scrollbar{
+            display: none;
+        }
     }
 
     &__entry{
