@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { activeNote } from '../../actions/notes';
+import { activeNote, startDeleting } from '../../actions/notes';
 import { useForm } from '../../hooks/useForm';
 import NotesAppBar from './NotesAppBar'
 
@@ -8,7 +8,7 @@ const NoteScreen = () => {
     const { active: note } = useSelector(state => state.notes);
     const dispatch = useDispatch();
     const [ formValues, handleInputChange, reset ] = useForm(note);
-    const { title, body, url } = formValues;
+    const { title, body, id } = formValues;
     const activeId = useRef( note.id );
 
     useEffect(() => {
@@ -22,6 +22,10 @@ const NoteScreen = () => {
         dispatch(activeNote(formValues.id, {...formValues}));
     }, [formValues, dispatch])
 
+
+    const handleDelete = ()=>{
+        dispatch( startDeleting( id ) );
+    }
 
     return (
         <div className="notes__main-content">
@@ -46,14 +50,16 @@ const NoteScreen = () => {
                 ></textarea>
                 
                 {
-                    url && (
+                    note.url && (
                         <div className="notes__image">
-                            <img src="https://static.educalingo.com/img/en/800/landscape.jpg" alt="Imagen" />
+                            <img src={ note.url } alt="Imagen" />
                         </div>
                     )
                 }
             </div>
-
+            <button className="btn btn-danger btn-block" onClick={ handleDelete }>
+                Delete
+            </button>
         </div>
     )
 }
